@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       
+        <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+         <script type="text/javascript">
+             
+             function mostrarDatos(){
+                 var url = "http://132.248.108.6/cec/Controladores/listaEventos.php";
+                 //alert(url);
+                    //$.post( "url" );
+                 var eventos = null;  
+                    $.post( url,
+                    //mandamos parametros en la siguiente linea
+                    {'param1':'val1', 'param2':'val2'},
+                        function( data, status ) {
+                            if (data.response_code == 0){
+                                //alert( "Data: " + data.response_data.events + "status" + status);
+                        
+                                eventos = data.response_data.events;
+                                var s = $('#select');
+                                for (i = 0; i < eventos.length; i++){
+                                    //alert(eventos[i].name);
+                                    s.append("<option value="+eventos[i].id+">"+eventos[i].name+"</option>")
+                                }
+                            }else{
+                                alert(data.response_msg);
+                            }
+                        },
+                        'json'
+                            
+                    );
+                    $('select').change(function(){
+                        $('#textoEvento').empty();
+                        //alert($(this).val());
+                        $('#textoEvento').append('<p>'+eventos[$(this).val()-1].name+'</br>'+eventos[$(this).val()-1].started_day+'</p>');
+                    });
+             }
+             
+             $(document).ready(
+                function(){
+                    
+                    $('#btnMostrar').click(function (){
+                        mostrarDatos();
+                    });
+                    
+                }
+            );
+             
+             
+          </script>
+          
+    </head>
+    <body>
+        Presione el boton [Mostrar] para mostrar los datos en el select </br></br>
+        <button id="btnMostrar">Mostrar</button></br></br>
+        <select id="select">
+            <option value="seleccione">Seleccione...</option>
+        </select>
+        </br></br>
+        <div id="textoEvento">Datos:</div>
+        
+    </body>
+</html>
